@@ -1,4 +1,4 @@
-package gaur.himanshu.medicationremainderapp.ui.theme
+package gaur.himanshu.medicationremainderapp.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
