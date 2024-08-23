@@ -75,6 +75,8 @@ dependencies {
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.kapt)
 
+    implementation(libs.compose.material)
+
     implementation(libs.hilt.compose.navigation)
 
 }
