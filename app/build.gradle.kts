@@ -76,6 +76,7 @@ dependencies {
     kapt(libs.dagger.kapt)
 
     implementation(libs.compose.material)
+    implementation(libs.retrofit.gson.convertor)
 
     implementation(libs.hilt.compose.navigation)
 
