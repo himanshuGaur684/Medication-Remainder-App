@@ -61,10 +61,10 @@ fun setUpPeriodicAlarm(context: Context, reminder: Reminder) {
 
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     try {
-        val interval = SystemClock.elapsedRealtime() + 2L * 60L * 1000L
+        val interval =   2L * 60L * 1000L
         alarmManager.setRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            reminder.timeInMillis,
+            SystemClock.elapsedRealtime()+reminder.timeInMillis,
             interval,
             pendingIntent
         )
