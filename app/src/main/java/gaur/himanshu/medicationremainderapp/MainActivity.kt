@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +45,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -97,11 +100,14 @@ fun MainScreen(viewModel: MainViewModel) {
     val timeInMillis = remember { mutableStateOf(0L) }
 
     ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topEnd = 24.dp, topStart = 24.dp),
         sheetState = sheetState,
         sheetContent = {
             Form(
-                time = format.format(timeInMillis),
-                onTimeClick = { /*TODO*/ }) { name, dosage, check ->
+                time = format.format(timeInMillis.value),
+                onTimeClick = {
+                    isTimePickerVisible.value = true
+                }) { name, dosage, check ->
                 val reminder = Reminder(
                     name, dosage, timeInMillis.value, isTaken = false,
                     isRepeat = check
@@ -111,6 +117,9 @@ fun MainScreen(viewModel: MainViewModel) {
                     setUpPeriodicAlarm(context, reminder)
                 } else {
                     setUpAlarm(context, reminder)
+                }
+                scope.launch {
+                    sheetState.hide()
                 }
             }
         }) {
@@ -143,6 +152,7 @@ fun MainScreen(viewModel: MainViewModel) {
                                     set(Calendar.MINUTE, timePickerState.minute)
                                 }
                                 timeInMillis.value = calendar.timeInMillis
+                                isTimePickerVisible.value = false
                             }) {
                                 Text(text = "Confirm")
                             }
@@ -167,7 +177,10 @@ fun MainScreen(viewModel: MainViewModel) {
                         .fillMaxSize()
                 ) {
                     items(uiState.data) {
-                        Card(modifier = Modifier.padding(8.dp)) {
+                        Card(modifier = Modifier.padding(8.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = if(it.isTaken) Color.Green.copy(alpha = 0.3f) else Color.Red.copy(alpha = 0.3f)
+                            )) {
                             Row(
                                 modifier = Modifier.padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -224,20 +237,20 @@ fun Form(time: String, onTimeClick: () -> Unit, onClick: (String, String, Boolea
 
     Column(
         modifier = Modifier
-            .padding(12.dp)
+            .padding(top = 24.dp, start = 12.dp, end = 12.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         OutlinedTextField(value = name.value, onValueChange = {
             name.value = it
-        }, modifier = Modifier.fillMaxWidth())
+        }, modifier = Modifier.fillMaxWidth(), singleLine = true)
 
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(value = dosage.value, onValueChange = {
             dosage.value = it
-        }, modifier = Modifier.fillMaxWidth())
+        }, modifier = Modifier.fillMaxWidth(), singleLine = true)
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -258,7 +271,9 @@ fun Form(time: String, onTimeClick: () -> Unit, onClick: (String, String, Boolea
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = { onClick.invoke(name.value, dosage.value, isChecked.value) }) {
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { onClick.invoke(name.value, dosage.value, isChecked.value) }) {
             Text(text = "Save")
         }
         Spacer(modifier = Modifier.height(32.dp))

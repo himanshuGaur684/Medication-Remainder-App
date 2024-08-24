@@ -95,7 +95,9 @@ class ReminderReceiver : BroadcastReceiver() {
                         .notify(1, notification)
 
                 }
-                mediaPlayer.release()
+                mediaPlayer.setOnCompletionListener {
+                    mediaPlayer.release()
+                }
                 mediaPlayer.start()
             }
         }
