@@ -177,10 +177,14 @@ fun MainScreen(viewModel: MainViewModel) {
                         .fillMaxSize()
                 ) {
                     items(uiState.data) {
-                        Card(modifier = Modifier.padding(8.dp),
+                        Card(
+                            modifier = Modifier.padding(8.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = if(it.isTaken) Color.Green.copy(alpha = 0.3f) else Color.Red.copy(alpha = 0.3f)
-                            )) {
+                                containerColor = if (it.isTaken) Color.Green.copy(alpha = 0.3f) else Color.Red.copy(
+                                    alpha = 0.3f
+                                )
+                            )
+                        ) {
                             Row(
                                 modifier = Modifier.padding(8.dp),
                                 verticalAlignment = Alignment.CenterVertically

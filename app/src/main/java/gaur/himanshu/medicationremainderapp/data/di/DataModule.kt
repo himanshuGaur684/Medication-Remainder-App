@@ -19,18 +19,18 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext context:Context):ReminderDatabase{
+    fun provideDatabase(@ApplicationContext context: Context): ReminderDatabase {
         return ReminderDatabase.getInstance(context)
     }
 
     @Provides
-    fun provideDao(reminderDatabase: ReminderDatabase):ReminderDao{
+    fun provideDao(reminderDatabase: ReminderDatabase): ReminderDao {
         return reminderDatabase.getReminderDao()
     }
 
 
     @Provides
-    fun provideReminderRepo(reminderDao: ReminderDao): ReminderRepository{
+    fun provideReminderRepo(reminderDao: ReminderDao): ReminderRepository {
         return ReminderRepoImpl(reminderDao)
     }
 }

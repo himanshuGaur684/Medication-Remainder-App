@@ -36,7 +36,6 @@ class MainViewModel @Inject constructor(
     fun delete(reminder: Reminder) = viewModelScope.launch {
         deleteUseCase.invoke(reminder)
     }
-
 }
 
 data class UiState(
