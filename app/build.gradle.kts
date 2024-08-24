@@ -78,5 +78,6 @@ dependencies {
     implementation(libs.compose.material)
 
     implementation(libs.hilt.compose.navigation)
+    implementation(libs.retrofit.gson.convertor)
 
 }
